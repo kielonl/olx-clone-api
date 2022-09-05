@@ -26,7 +26,7 @@ fastify.addHook("onRequest", (request, response, done) => {
 user();
 
 fastify.get("/", async (request, response) => {
-  response.code(200).send({ data: "" });
+  response.code(200).send({ data: "cannons" });
 });
 
 fastify.listen({ port: port }, (err, address) => {
