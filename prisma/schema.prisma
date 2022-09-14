@@ -12,18 +12,23 @@ model users {
   password    String
   e_mail      String  @map("e-mail")
   profile_pic String?
+  offer       offer[]
 }
 
 model categories {
-  id   String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name String
+  id    String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name  String
+  offer offer[]
 }
 
 model offer {
-  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id           String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  category     String     @db.Uuid
   title        String
-  category     String
   images       String[]
   description  String
   localisation String
+  author_id    String     @db.Uuid
+  categories   categories @relation(fields: [category], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_offer_category")
+  users        users      @relation(fields: [author_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_offer_user")
 }

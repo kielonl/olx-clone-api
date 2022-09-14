@@ -9,4 +9,5 @@ export interface Offer {
   images?: string[];
   description: string;
   localisation: string;
+  author_id: string;
 }

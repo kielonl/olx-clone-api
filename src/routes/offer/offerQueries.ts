@@ -13,7 +13,9 @@ export const createOffer = async (offerInfo: Offer) => {
       images: offerInfo.images,
       description: offerInfo.description,
       localisation: offerInfo.localisation,
+      author_id: offerInfo.author_id,
     },
+    include: { categories: true },
   });
   return createOffer;
 };

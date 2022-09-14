@@ -1,13 +1,11 @@
 import createError from "http-errors";
+import { lengthValid } from "../../helpers/helpers";
 import { Offer } from "../../types";
 import { categoryExists } from "../category/categoryQueries";
-
-const lengthValid = (string: string, min: number, max: number) => {
-  return string.length > min || string.length < max;
-};
+import { userExistsByUUID } from "../user/userQueries";
 
 const titleValidation = (title: string): boolean => {
-  if (!lengthValid(title.trim(), 5, 20)) {
+  if (!lengthValid(title, 5, 20)) {
     throw createError(400, "title length must be between 5 and 20 characters");
   }
   return true;
@@ -31,7 +29,16 @@ const descriptionValidation = (description: string): boolean => {
   return true;
 };
 
+const authorValidation = async (authorId: string): Promise<boolean> => {
+  const userExists = await userExistsByUUID(authorId);
+  if (!userExists) {
+    throw createError(400, "this user does not exist");
+  }
+  return true;
+};
+
 export const offerValidation = async (offerInfo: Offer): Promise<boolean> => {
+  await authorValidation(offerInfo.author_id);
   titleValidation(offerInfo.title);
   await categoryValidation(offerInfo.category);
   descriptionValidation(offerInfo.description);

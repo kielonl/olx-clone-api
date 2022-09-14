@@ -4,9 +4,14 @@ import {
   EMAIL_VALID_REGEX,
   INCLUDES_NUMBER_REGEX,
 } from "../../constants/REGEX_PATTERNS";
-import { emailExists, insertUser, userExists } from "./userQueries";
+import {
+  emailExists,
+  insertUser,
+  userExistsByCredentials,
+} from "./userQueries";
 
 import { User } from "../../types";
+import { lengthValid } from "../../helpers/helpers";
 
 const passwordHashing = (password: string) => {
   if (process.env.HASH_KEY !== undefined) {
@@ -17,7 +22,7 @@ const passwordHashing = (password: string) => {
   throw createError(500, "hash key error");
 };
 const passwordValidation = (password: string) => {
-  if (password.length < 3 || password.length > 12) {
+  if (!lengthValid(password, 3, 12)) {
     throw createError(
       400,
       "password length must be between 3 and 12 characters"
@@ -42,7 +47,7 @@ const emailValidation = async (email: string) => {
 
 const checkUser = async (userInfo: User) => {
   userInfo.password = passwordHashing(userInfo.password);
-  const userDoesExist = await userExists(userInfo);
+  const userDoesExist = await userExistsByCredentials(userInfo);
 
   if (userDoesExist === null) {
     throw createError(400, "incorrect credentials");
