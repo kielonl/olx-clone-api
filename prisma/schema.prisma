@@ -13,3 +13,17 @@ model users {
   e_mail      String  @map("e-mail")
   profile_pic String?
 }
+
+model categories {
+  id   String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name String
+}
+
+model offer {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title        String
+  category     String
+  images       String[]
+  description  String
+  localisation String
+}
