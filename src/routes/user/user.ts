@@ -14,6 +14,6 @@ export const user = () => {
   fastify.post<{ Body: User }>("/auth/login", async (request, response) => {
     const userInfo = request.body;
     await loginValidation(userInfo);
-    response.code(200).send({ data: request.body });
+    response.code(200).send({ userInfo });
   });
 };
