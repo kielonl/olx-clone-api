@@ -5,7 +5,6 @@ import { loginValidation, registerValidation } from "./userValidation";
 export const user = () => {
   fastify.post<{ Body: User }>("/user", async (request, response) => {
     const userInfo = request.body;
-    console.log(userInfo);
     await registerValidation(userInfo);
 
     response.code(200).send({ userInfo });
