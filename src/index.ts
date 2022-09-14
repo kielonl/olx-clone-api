@@ -1,5 +1,6 @@
 import Fastify from "fastify";
 import { PrismaClient } from "@prisma/client";
+import { user } from "./routes/user/user";
 
 export const prisma = new PrismaClient();
 export const fastify = Fastify({
@@ -22,8 +23,10 @@ fastify.addHook("onRequest", (request, response, done) => {
   done();
 });
 
+user();
+
 fastify.get("/", async (request, response) => {
-  response.code(200).send({ data: "" });
+  response.code(200).send({ data: "cannons" });
 });
 
 fastify.listen({ port: port }, (err, address) => {
