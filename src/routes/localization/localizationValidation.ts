@@ -16,7 +16,7 @@ export const similarityCalculation = async (givenString: string) => {
       similarity: similarity(givenString, localizations[i].post_code),
     };
 
-    if (result.similarity === 1) {
+    if (result.similarity > 0.8) {
       prevValues[givenString] = result;
       return result;
     }
