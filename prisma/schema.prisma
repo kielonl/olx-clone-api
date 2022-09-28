@@ -29,7 +29,7 @@ model offer {
   title        String
   images       String[]
   description  String
-  localisation String
+  localization String
   author_id    String     @db.Uuid
   categories   categories @relation(fields: [category], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_offer_category")
   users        users      @relation(fields: [author_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_offer_user")

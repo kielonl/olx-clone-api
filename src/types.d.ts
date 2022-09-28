@@ -8,6 +8,6 @@ export interface Offer {
   category: string;
   images?: string[];
   description: string;
-  localisation: string;
+  localization: string;
   author_id: string;
 }

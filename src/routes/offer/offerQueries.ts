@@ -12,7 +12,7 @@ export const createOffer = async (offerInfo: Offer) => {
       category: offerInfo.category,
       images: offerInfo.images,
       description: offerInfo.description,
-      localisation: offerInfo.localisation,
+      localization: offerInfo.localization,
       author_id: offerInfo.author_id,
     },
     include: { categories: true },
