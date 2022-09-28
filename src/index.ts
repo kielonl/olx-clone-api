@@ -3,6 +3,7 @@ import { PrismaClient } from "@prisma/client";
 import { user } from "./routes/user/user";
 import { offer } from "./routes/offer/offer";
 import { category } from "./routes/category/category";
+import { localization } from "./routes/localization/localization";
 
 export const prisma = new PrismaClient();
 export const fastify = Fastify({
@@ -28,6 +29,7 @@ fastify.addHook("onRequest", (request, response, done) => {
 user();
 offer();
 category();
+localization();
 fastify.get("/", async (request, response) => {
   response.code(200).send({ data: "cannons" });
 });
