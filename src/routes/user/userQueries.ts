@@ -21,8 +21,8 @@ export const insertUser = async (userInfo: User) => {
   return insertUser;
 };
 
-export const userExists = async (userInfo: User) => {
-  const userExists = await prisma.users.findFirst({
+export const userExistsByCredentials = async (userInfo: User) => {
+  const userExistsByCredentials = await prisma.users.findFirst({
     where: {
       AND: {
         e_mail: userInfo.email,
@@ -30,5 +30,19 @@ export const userExists = async (userInfo: User) => {
       },
     },
   });
-  return userExists;
+  return userExistsByCredentials;
+};
+
+export const userExistsByUUID = async (author_id: string) => {
+  const userExistsByUUID = await prisma.users.findFirst({
+    where: {
+      id: author_id,
+    },
+  });
+  return userExistsByUUID;
+};
+
+export const getUsers = async () => {
+  const getUsers = await prisma.users.findMany();
+  return getUsers;
 };

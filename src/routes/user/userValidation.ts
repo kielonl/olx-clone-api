@@ -4,11 +4,16 @@ import {
   EMAIL_VALID_REGEX,
   INCLUDES_NUMBER_REGEX,
 } from "../../constants/REGEX_PATTERNS";
-import { emailExists, insertUser, userExists } from "./userQueries";
+import {
+  emailExists,
+  insertUser,
+  userExistsByCredentials,
+} from "./userQueries";
 
 import { User } from "../../types";
+import { lengthValid } from "../../helpers/helpers";
 
-const passwordHashing = (password: string) => {
+const passwordHashing = (password: string): string => {
   if (process.env.HASH_KEY !== undefined) {
     const hasher = crypto.createHmac("sha256", process.env.HASH_KEY);
     password = hasher.update(password).digest("hex");
@@ -16,8 +21,8 @@ const passwordHashing = (password: string) => {
   }
   throw createError(500, "hash key error");
 };
-const passwordValidation = (password: string) => {
-  if (password.length < 3 || password.length > 12) {
+const passwordValidation = (password: string): boolean => {
+  if (!lengthValid(password, 3, 12)) {
     throw createError(
       400,
       "password length must be between 3 and 12 characters"
@@ -32,26 +37,26 @@ const passwordValidation = (password: string) => {
   return true;
 };
 
-const emailValidation = async (email: string) => {
+const emailValidation = async (email: string): Promise<boolean> => {
   const check = await emailExists(email);
   if (check !== null) {
     throw createError(400, "user with this e-mail already exists");
   }
   if (EMAIL_VALID_REGEX.test(email)) return true;
+  return false;
 };
 
-const checkUser = async (userInfo: User) => {
+const userExists = async (userInfo: User): Promise<boolean> => {
   userInfo.password = passwordHashing(userInfo.password);
-  const userDoesExist = await userExists(userInfo);
+  const userDoesExist = await userExistsByCredentials(userInfo);
 
   if (userDoesExist === null) {
     throw createError(400, "incorrect credentials");
   }
-
-  return userDoesExist;
+  return true;
 };
 
-export const registerValidation = async (userInfo: User) => {
+export const registerValidation = async (userInfo: User): Promise<boolean> => {
   await emailValidation(userInfo.email);
   passwordValidation(userInfo.password);
 
@@ -61,7 +66,7 @@ export const registerValidation = async (userInfo: User) => {
   return true;
 };
 
-export const loginValidation = async (userInfo: User) => {
-  await checkUser(userInfo);
+export const loginValidation = async (userInfo: User): Promise<boolean> => {
+  await userExists(userInfo);
   return true;
 };
