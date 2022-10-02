@@ -9,20 +9,16 @@ export const getLocalizations = async () => {
 
 export const getLocalizationByPostCode = async (postCode: string) => {
   const getLocalizationByPostCode =
-    await prisma.$queryRaw`SELECT DISTINCT (post_code) FROM public.places WHERE post_code LIKE ${
+    await prisma.$queryRaw`SELECT DISTINCT (post_code),county FROM public.places WHERE post_code  LIKE ${
       postCode + "%"
-    };`;
+    } LIMIT 10;`;
   return getLocalizationByPostCode;
 };
 
-// export const getLocalizationByPostCode = async (post_code: string) => {
-//   const getLocalizationByPostCode = await prisma.places.findMany({
-//     distinct: ["post_code"],
-//     where: {
-//       post_code: {
-//         contains: post_code,
-//       },
-//     },
-//   });
-//   return getLocalizationByPostCode;
-// };
+export const getLocalizationByPlace = async (place: string) => {
+  const getLocalizationByPlace =
+    await prisma.$queryRaw`SELECT place,county,voivodeship FROM public.places WHERE place  LIKE ${
+      place + "%"
+    } LIMIT 10;`;
+  return getLocalizationByPlace;
+};
