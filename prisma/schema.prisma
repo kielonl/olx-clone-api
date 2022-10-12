@@ -34,3 +34,12 @@ model offer {
   categories   categories @relation(fields: [category], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_offer_category")
   users        users      @relation(fields: [author_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_offer_user")
 }
+
+model places {
+  id          String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  place       String
+  commune     String
+  county      String
+  voivodeship String
+  post_code   String
+}

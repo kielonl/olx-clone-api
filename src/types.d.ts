@@ -11,3 +11,8 @@ export interface Offer {
   localization: string;
   author_id: string;
 }
+
+export interface Localization {
+  postCode: string;
+  place: string;
+}
