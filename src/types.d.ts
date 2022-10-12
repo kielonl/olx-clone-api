@@ -16,3 +16,15 @@ export interface Localization {
   postCode: string;
   place: string;
 }
+
+export interface OfferResult {
+  next?: {
+    page: number;
+    limit: number;
+  };
+  previous?: {
+    page: number;
+    limit: number;
+  };
+  data?: Offer[];
+}

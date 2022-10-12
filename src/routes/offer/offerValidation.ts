@@ -1,6 +1,6 @@
 import createError from "http-errors";
 import { lengthValid } from "../../helpers/helpers";
-import { Offer } from "../../types";
+import { Offer, OfferResult } from "../../types";
 import { categoryExists } from "../category/categoryQueries";
 import { userExistsByUUID } from "../user/userQueries";
 
@@ -43,4 +43,30 @@ export const offerValidation = async (offerInfo: Offer): Promise<boolean> => {
   await categoryValidation(offerInfo.category);
   descriptionValidation(offerInfo.description);
   return true;
+};
+
+export const paginatedResults = (model: any[], page: string) => {
+  const pages = parseInt(page);
+  const limit = 1;
+
+  const startIndex = (pages - 1) * limit;
+  const endIndex = pages * limit;
+
+  const results: OfferResult = {};
+
+  if (endIndex < model.length) {
+    results.next = {
+      page: pages + 1,
+      limit: limit,
+    };
+  }
+
+  if (startIndex > 0) {
+    results.previous = {
+      page: pages - 1,
+      limit: limit,
+    };
+  }
+  results.data = model.slice(startIndex, endIndex);
+  return results;
 };
